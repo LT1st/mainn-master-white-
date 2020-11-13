@@ -17,12 +17,9 @@
 #include "getdepth_green.h"
 #include "hough_round.h"
 #include "deviation_angle.h"
+#include "color.h"
 
-#define PINK  1
-#define WHITE 2
-#define BLACK 3
-#define BLUE  4
-#define GREEN 5
+
 
 //HSV的参数设定
 int hmin_Max = 261;int hmax_Max = 360;

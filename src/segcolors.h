@@ -12,4 +12,4 @@ using namespace cv;
 
 //用测好的参数来HSV分割， trickbar参数测量在 hsv分割地面（保留） 
 Mat segmentation_HSV(int hmin, int hmax, int smin, int smax, 
-					 int vmin, int vmax, Mat input);
+					 int vmin, int vmax, Mat input, int bkg_color);

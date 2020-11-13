@@ -10,7 +10,7 @@ int vmin_Max_seg = 255;int vmax_Max_seg = 255;
 
 //用测好的参数来HSV分割， trickbar参数测量在 hsv分割地面（保留） 
 Mat segmentation_HSV(int hmin, int hmax, int smin, int smax, 
-					 int vmin, int vmax, Mat input)
+					 int vmin, int vmax, Mat input, int bkg_color)
 {
 	Mat output, hsv_bgr_gnd, hsv_hsv_gnd, hsv_dst_gnd;
 	if (!input.data || input.channels() != 3)
