@@ -1,5 +1,7 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/Test.dir/src/detect.cpp.o"
   "CMakeFiles/Test.dir/src/deviation_angle.cpp.o"
+  "CMakeFiles/Test.dir/src/find_cicles.cpp.o"
   "CMakeFiles/Test.dir/src/getdepth_green.cpp.o"
   "CMakeFiles/Test.dir/src/hough_round.cpp.o"
   "CMakeFiles/Test.dir/src/main.cpp.o"

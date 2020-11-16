@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "/home/burn-e/Code/cmake/mainn-master(white)"
+CMAKE_SOURCE_DIR = "/home/steven/code/tst/mainWork/mainn-master(white)"
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "/home/burn-e/Code/cmake/mainn-master(white)/build"
+CMAKE_BINARY_DIR = "/home/steven/code/tst/mainWork/mainn-master(white)/build"
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/burn-e/Code/cmake/mainn-master(white)/build/CMakeFiles" "/home/burn-e/Code/cmake/mainn-master(white)/build/CMakeFiles/progress.marks"
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/steven/code/tst/mainWork/mainn-master(white)/build/CMakeFiles" "/home/steven/code/tst/mainWork/mainn-master(white)/build/CMakeFiles/progress.marks"
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/burn-e/Code/cmake/mainn-master(white)/build/CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/steven/code/tst/mainWork/mainn-master(white)/build/CMakeFiles" 0
 .PHONY : all
 
 # The main clean target
@@ -123,6 +123,33 @@ Test/fast:
 	$(MAKE) -f CMakeFiles/Test.dir/build.make CMakeFiles/Test.dir/build
 .PHONY : Test/fast
 
+src/detect.o: src/detect.cpp.o
+
+.PHONY : src/detect.o
+
+# target to build an object file
+src/detect.cpp.o:
+	$(MAKE) -f CMakeFiles/Test.dir/build.make CMakeFiles/Test.dir/src/detect.cpp.o
+.PHONY : src/detect.cpp.o
+
+src/detect.i: src/detect.cpp.i
+
+.PHONY : src/detect.i
+
+# target to preprocess a source file
+src/detect.cpp.i:
+	$(MAKE) -f CMakeFiles/Test.dir/build.make CMakeFiles/Test.dir/src/detect.cpp.i
+.PHONY : src/detect.cpp.i
+
+src/detect.s: src/detect.cpp.s
+
+.PHONY : src/detect.s
+
+# target to generate assembly for a file
+src/detect.cpp.s:
+	$(MAKE) -f CMakeFiles/Test.dir/build.make CMakeFiles/Test.dir/src/detect.cpp.s
+.PHONY : src/detect.cpp.s
+
 src/deviation_angle.o: src/deviation_angle.cpp.o
 
 .PHONY : src/deviation_angle.o
@@ -149,6 +176,33 @@ src/deviation_angle.s: src/deviation_angle.cpp.s
 src/deviation_angle.cpp.s:
 	$(MAKE) -f CMakeFiles/Test.dir/build.make CMakeFiles/Test.dir/src/deviation_angle.cpp.s
 .PHONY : src/deviation_angle.cpp.s
+
+src/find_cicles.o: src/find_cicles.cpp.o
+
+.PHONY : src/find_cicles.o
+
+# target to build an object file
+src/find_cicles.cpp.o:
+	$(MAKE) -f CMakeFiles/Test.dir/build.make CMakeFiles/Test.dir/src/find_cicles.cpp.o
+.PHONY : src/find_cicles.cpp.o
+
+src/find_cicles.i: src/find_cicles.cpp.i
+
+.PHONY : src/find_cicles.i
+
+# target to preprocess a source file
+src/find_cicles.cpp.i:
+	$(MAKE) -f CMakeFiles/Test.dir/build.make CMakeFiles/Test.dir/src/find_cicles.cpp.i
+.PHONY : src/find_cicles.cpp.i
+
+src/find_cicles.s: src/find_cicles.cpp.s
+
+.PHONY : src/find_cicles.s
+
+# target to generate assembly for a file
+src/find_cicles.cpp.s:
+	$(MAKE) -f CMakeFiles/Test.dir/build.make CMakeFiles/Test.dir/src/find_cicles.cpp.s
+.PHONY : src/find_cicles.cpp.s
 
 src/getdepth_green.o: src/getdepth_green.cpp.o
 
@@ -267,9 +321,15 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... Test"
 	@echo "... edit_cache"
+	@echo "... src/detect.o"
+	@echo "... src/detect.i"
+	@echo "... src/detect.s"
 	@echo "... src/deviation_angle.o"
 	@echo "... src/deviation_angle.i"
 	@echo "... src/deviation_angle.s"
+	@echo "... src/find_cicles.o"
+	@echo "... src/find_cicles.i"
+	@echo "... src/find_cicles.s"
 	@echo "... src/getdepth_green.o"
 	@echo "... src/getdepth_green.i"
 	@echo "... src/getdepth_green.s"

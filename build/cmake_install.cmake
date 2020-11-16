@@ -1,4 +1,4 @@
-# Install script for directory: /home/burn-e/Code/cmake/mainn-master(white)
+# Install script for directory: /home/steven/code/tst/mainWork/mainn-master(white)
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/burn-e/Code/cmake/mainn-master(white)/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/steven/code/tst/mainWork/mainn-master(white)/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

@@ -17,20 +17,7 @@
 #include "getdepth_green.h"
 #include "hough_round.h"
 #include "deviation_angle.h"
-#include "color.h"
-
-
-
-//HSV的参数设定
-int hmin_Max = 261;int hmax_Max = 360;
-int smin_Max = 47 ;int smax_Max = 255;
-int vmin_Max = 0  ;int vmax_Max = 255;
-//霍夫参数设定
-int hough_minDist = 75;          //圆心之间的最小距离= 70
-int hough_canny = 20;            //canny边缘检测算子的高阈值，而低阈值为高阈值的一半。= 100
-int hough_addthersold = 40;      //检测阶段圆心的累加器阈值 是否完美的圆形 = 100
-int hough_minRadius = 0;         //有默认值0，表示圆半径的最小值= 0
-int hough_maxRadius = 30;        //有默认值0，表示圆半径的最大值= 0
+#include "ConstVariate.h"               
 
 /* using namespace cv;
 using namespace std; */
@@ -81,6 +68,12 @@ int main()
  
     while (cvGetWindowHandle(depth_win)&&cvGetWindowHandle(color_win)) // Application still alive?
     {
+        //确定兴趣区域
+        roi_region_x = imgRows*3/4-50;
+        roi_region_x1 = imgRows;
+        roi_region_y = imgCols/2;
+        roi_region_y1 = imgCols;
+
         //堵塞程序直到新的一帧捕获
         rs2::frameset frameset = pipe.wait_for_frames();
         //取深度图和彩色图
@@ -92,7 +85,7 @@ int main()
         const int depth_h=depth_frame.as<rs2::video_frame>().get_height();
         const int color_w=color_frame.as<rs2::video_frame>().get_width();
         const int color_h=color_frame.as<rs2::video_frame>().get_height();
- 
+
         //创建OPENCV类型 并传入数据
         Mat depth_image(Size(depth_w,depth_h),
                                 CV_16U,(void*)depth_frame.get_data(),Mat::AUTO_STEP);
@@ -101,22 +94,24 @@ int main()
         Mat color_image(Size(color_w,color_h),
                                 CV_8UC3,(void*)color_frame.get_data(),Mat::AUTO_STEP);
 
+        //多个颜色切换检测
+
         ball_color = BLACK;
         switch (ball_color){
             case PINK :
                 //HSV滤色的参数设定
-                  hmin_Max = 261;  
-                  hmax_Max = 360;
-                  smin_Max = 47 ;  
-                  smax_Max = 255;
-                  vmin_Max = 0  ;  
-                  vmax_Max = 255;
+                hmin_Max = 261;  
+                hmax_Max = 360;
+                smin_Max = 47 ;  
+                smax_Max = 255;
+                vmin_Max = 0  ;  
+                vmax_Max = 255;
                 //霍夫参数设定
-                  hough_minDist = 75;          //圆心之间的最小距离= 70
-                  hough_canny = 20;            //canny边缘检测算子的高阈值，而低阈值为高阈值的一半。= 100
-                  hough_addthersold = 40;      //检测阶段圆心的累加器阈值 是否完美的圆形 = 100
-                  hough_minRadius = 0;         //有默认值0，表示圆半径的最小值= 0
-                  hough_maxRadius = 30;        //有默认值0，表示圆半径的最大值= 0
+                hough_minDist = 75;          //圆心之间的最小距离= 70
+                hough_canny = 20;            //canny边缘检测算子的高阈值，而低阈值为高阈值的一半。= 100
+                hough_addthersold = 40;      //检测阶段圆心的累加器阈值 是否完美的圆形 = 100
+                hough_minRadius = 0;         //有默认值0，表示圆半径的最小值= 0
+                hough_maxRadius = 30;        //有默认值0，表示圆半径的最大值= 0
                 break;
 
             case WHITE :
@@ -130,17 +125,19 @@ int main()
                 //霍夫参数设定
                 hough_minDist = 500;          //圆心之间的最小距离= 70
                 hough_canny = 100;            //canny边缘检测算子的高阈值，而低阈值为高阈值的一半。= 100
-                hough_addthersold = 30;      //检测阶段圆心的累加器阈值 是否完美的圆形 = 100
-                hough_minRadius = 0;         //有默认值0，表示圆半径的最小值= 0
-                hough_maxRadius = 50;        //有默认值0，表示圆半径的最大值= 0
+                hough_addthersold = 30;       //检测阶段圆心的累加器阈值 是否完美的圆形 = 100
+                hough_minRadius = 0;          //有默认值0，表示圆半径的最小值= 0
+                hough_maxRadius = 50;         //有默认值0，表示圆半径的最大值= 0
                 break;
 
             case BLUE :
 
                 break;
+
             case GREEN :
 
                 break;
+
             case BLACK :
                 //HSV滤色的参数设定
                 hmin_Max =  0 ;  
@@ -155,44 +152,51 @@ int main()
                 hough_addthersold = 40;      //检测阶段圆心的累加器阈值 是否完美的圆形 = 100
                 hough_minRadius = 0;         //有默认值0，表示圆半径的最小值= 0
                 hough_maxRadius = 30;        //有默认值0，表示圆半径的最大值= 0
+                //修改bkg
+                seg_bkg = WHITE;
                 break;
 
             default:
+
                 break;
         }
         Mat mid_color_image = color_image.clone();
         //mid_color_image = mid_color_image(Rect(color_image.cols/2,color_image.rows*3/4,color_image.rows/4,color_image.cols/2)).clone(); 
+        //!这里要改roi，变成全局统一的位置
         mid_color_image = mid_color_image(Range(color_image.rows*3/4-50,color_image.rows),Range(color_image.cols/2,color_image.cols)).clone(); 
-        
+        cout << "mid_color_image\n";
+        //mid_color_image = mid_color_image(Range(roi_region_x,roi_region_x1),Range(roi_region_y,roi_region_y1)).clone(); 
         namedWindow("tst");
         imshow("tst",mid_color_image);                    
         //用测好的参数来HSV分割， trickbar参数测量在 hsv分割地面（保留）
         segcolor_pic = segmentation_HSV(hmin_Max , hmax_Max, 
-            smin_Max, smax_Max, vmin_Max, vmax_Max, mid_color_image);
+            smin_Max, smax_Max, vmin_Max, vmax_Max, mid_color_image, seg_bkg);
         namedWindow("segcolor");imshow("segcolor", segcolor_pic);
-
+        cout << "mid_color_image1\n";
         //找到圆  color_image
         vector<Vec3f> circles = houghRound_circles(segcolor_pic, 
             hough_minDist, hough_canny, hough_addthersold, hough_minRadius, hough_maxRadius);
-
+        cout << "mid_color_image2\n";
         namedWindow("color_image");imshow("color_image", color_image);
         //实现深度图对齐到彩色图
         result = align_Depth2Color(depth_image,color_image,profile);
         //找到的圆的数量：
         if(circles.size() != 0)
         {
-            centerLocation_x = cvRound(circles[0][0]);
-            centerLocation_y = cvRound(circles[0][1]);
+            centerLocation_x = cvRound(circles[0][0]) + roi_region_x;
+            centerLocation_y = cvRound(circles[0][1]) + roi_region_y;
+            //测量距离
+            measure_distance(color_image,result,cv::Size(20,20),profile,centerLocation_x,centerLocation_y);
+            //测量角度
+            cout<<deviation_angle_x(centerLocation_x,centerLocation_y)<<"\t"<<
+            deviation_angle_y(centerLocation_x,centerLocation_y)<<endl;
         }
         else
         {
         }
+       // centerLocation_x += roi_region_x;
+       // centerLocation_y += roi_region_y;
         
-        //测量距离
-        measure_distance(color_image,result,cv::Size(20,20),profile,centerLocation_x,centerLocation_y);
-        //测量角度
-        cout<<deviation_angle_x(centerLocation_x,centerLocation_y)<<"\t"<<
-        deviation_angle_y(centerLocation_x,centerLocation_y)<<endl;
         //显示
         imshow(depth_win,depth_image_4_show);
         imshow(color_win,color_image);
