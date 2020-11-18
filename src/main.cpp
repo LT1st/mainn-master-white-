@@ -24,6 +24,10 @@ using namespace std; */
 
 int main()
 {
+    //初始化启动时间
+    time_main = static_cast<double>(getTickCount());
+
+    //初始化窗口
     const char* depth_win="depth_Image1nit";
     namedWindow(depth_win,WINDOW_AUTOSIZE);
     const char* color_win="color_Image1nit";
@@ -65,9 +69,10 @@ int main()
     //直接获取从深度摄像头坐标系到彩色摄像头坐标系的欧式变换矩阵
     auto  extrinDepth2Color=depth_stream.get_extrinsics_to(color_stream);
 
- 
+    
     while (cvGetWindowHandle(depth_win)&&cvGetWindowHandle(color_win)) // Application still alive?
     {
+        time_main = (double)getTickCount()/getTickFrequency();
         //确定兴趣区域
         roi_region_x = imgRows*3/4-50;
         roi_region_x1 = imgRows;
@@ -116,9 +121,9 @@ int main()
 
             case WHITE :
                 //HSV滤色的参数设定
-                hmin_Max = 185 ;  
+                hmin_Max = 185;  
                 hmax_Max = 319;
-                smin_Max = 32;
+                smin_Max = 32;                 
                 smax_Max = 140;
                 vmin_Max = 100;  
                 vmax_Max = 255;
@@ -131,20 +136,44 @@ int main()
                 break;
 
             case BLUE :
-
+                //HSV滤色的参数设定
+                hmin_Max = 210;  
+                hmax_Max = 360;
+                smin_Max = 40;
+                smax_Max = 255;
+                vmin_Max = 0;  
+                vmax_Max = 255;
+                //霍夫参数设定
+                hough_minDist = 500;          //圆心之间的最小距离= 70
+                hough_canny = 50;            //canny边缘检测算子的高阈值，而低阈值为高阈值的一半。= 100
+                hough_addthersold = 30;      //检测阶段圆心的累加器阈值 是否完美的圆形 = 100
+                hough_minRadius = 0;         //有默认值0，表示圆半径的最小值= 0
+                hough_maxRadius = 50;        //有默认值0，表示圆半径的最大值= 0
                 break;
 
             case GREEN :
-
+                //HSV滤色的参数设定
+                hmin_Max = 60 ;  
+                hmax_Max = 130;
+                smin_Max = 70;
+                smax_Max = 255;
+                vmin_Max = 50;  
+                vmax_Max = 190;
+                //霍夫参数设定
+                hough_minDist = 500;          //圆心之间的最小距离= 70
+                hough_canny = 50;            //canny边缘检测算子的高阈值，而低阈值为高阈值的一半。= 100
+                hough_addthersold = 30;      //检测阶段圆心的累加器阈值 是否完美的圆形 = 100
+                hough_minRadius = 0;         //有默认值0，表示圆半径的最小值= 0
+                hough_maxRadius = 50;        //有默认值0，表示圆半径的最大值= 0
                 break;
 
             case BLACK :
                 //HSV滤色的参数设定
-                hmin_Max =  0 ;  
+                hmin_Max =  0 ;
                 hmax_Max = 360;
-                smin_Max = 0  ;  
+                smin_Max = 0  ;
                 smax_Max = 255;
-                vmin_Max = 0  ;  
+                vmin_Max = 0  ;
                 vmax_Max = 75;
                 //霍夫参数设定
                 hough_minDist = 500;          //圆心之间的最小距离= 70
@@ -202,6 +231,8 @@ int main()
         imshow(color_win,color_image);
 
         namedWindow("result");imshow("result",result);
+        
+        cout << "FPS" << (1/(((double)getTickCount())/getTickFrequency() - time_main)) <<"\t"<< (double)getTickCount()/getTickFrequency() - time_main <<endl;
         waitKey(1);
     }
 

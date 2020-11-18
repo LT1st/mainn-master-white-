@@ -5,6 +5,8 @@
 #define BLUE  4
 #define GREEN 5
 
+//全局变量，应该加g_
+
 //HSV的参数设定
 int hmin_Max = 261;int hmax_Max = 360;
 int smin_Max = 47 ;int smax_Max = 255;
@@ -28,3 +30,10 @@ int roi_region_y = 240;
 
 //长度参数
 float imgRows = 640, imgCols = 480;
+
+//时间记录
+double time_main =0;
+
+//相机参数
+float g_dpth_ppx = 326.615;
+float g_dpth_ppy = 241.493;
