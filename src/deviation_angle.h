@@ -2,6 +2,8 @@
 #include <string>
 #include <cmath>
 
+//#include "ConstVariate.h"
+
 /* #include <opencv2/core.hpp>
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
@@ -11,7 +13,7 @@
 using namespace std;
 using namespace cv; */
 
-
+extern float g_dpth_ppx, g_dpth_ppy , g_dpth_fx , g_dpth_fy;
 
 /*
 输入：传入点的位置 double a,b

@@ -14,6 +14,8 @@ float get_depth_scale(rs2::device dev)
     }
     throw std::runtime_error("Device does not have a depth sensor");
 }
+
+
 //深度图对齐到彩色图函数
 Mat align_Depth2Color(Mat depth,Mat color,rs2::pipeline_profile profile){
     //声明数据流
@@ -21,11 +23,16 @@ Mat align_Depth2Color(Mat depth,Mat color,rs2::pipeline_profile profile){
     auto color_stream=profile.get_stream(RS2_STREAM_COLOR).as<rs2::video_stream_profile>();
  
     //获取内参
-    const auto intrinDepth=depth_stream.get_intrinsics();
-    const auto intrinColor=color_stream.get_intrinsics();
-    
-    cout <<"\t深度相机内参："<< intrinDepth.ppx<<"\t"<< intrinDepth.ppy<<"\t"<<intrinDepth.fx<<"\t"<<intrinDepth.fy<<"\t"
-         <<"\t彩色相机参数："<< intrinColor.ppx<<"\t"<< intrinColor.ppy<<"\t" <<endl;
+    const auto intrinDepth = depth_stream.get_intrinsics();
+    const auto intrinColor = color_stream.get_intrinsics();
+           g_dpth_ppx = intrinDepth.ppx;
+           g_dpth_fx  = intrinDepth.fx;
+           g_dpth_ppy = intrinDepth.ppy;
+           g_dpth_fy  = intrinDepth.fy;
+
+    cout << "\t深度相机内参：" << g_dpth_ppx << "\t" << g_dpth_ppy << "\t" << g_dpth_fx
+         << "\t" << g_dpth_fy << "\t"
+         << "\t彩色相机参数：" << intrinColor.ppx << "\t" << intrinColor.ppy << "\t" << endl;
 
     //直接获取从深度摄像头坐标系到彩色摄像头坐标系的欧式变换矩阵
     //auto  extrinDepth2Color=depth_stream.get_extrinsics_to(color_stream);
@@ -107,7 +114,7 @@ void measure_distance(Mat &color,Mat depth,cv::Size range,rs2::pipeline_profile 
     float effective_distance=distance_sum/effective_pixel;
     cout<<"目标距离："<<effective_distance<<" m"<<endl;
     char distance_str[30];
-    sprintf(distance_str,"the distance is:%f m",effective_distance);
+    sprintf(distance_str,"Distance:%f m",effective_distance);
     cv::rectangle(color,RectRange,Scalar(0,0,255),2,8);
     cv::putText(color,(string)distance_str,cv::Point(color.cols*0.02,color.rows*0.05),
                 cv::FONT_HERSHEY_PLAIN,2,Scalar(0,255,0),2,8);

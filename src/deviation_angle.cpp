@@ -18,9 +18,10 @@ double deviation_angle_y(double a, double b)
 //atan2()用于计算已知xy计算角度的函数
 double deviation_angle_y(double a, double b)
 {
-    atan2((a-))
+    return atan2((g_dpth_ppx - a), g_dpth_fx);
 }
+
 double deviation_angle_x(double a, double b)
 {
-    
+    return atan2((g_dpth_ppy - b), g_dpth_fy);
 }
