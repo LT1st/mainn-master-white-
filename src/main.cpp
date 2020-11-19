@@ -46,6 +46,8 @@ int hough_maxRadius = 30;        //有默认值0，表示圆半径的最大值= 
 
 //分割时背景的颜色设定
 int seg_bkg = BLACK;
+//球的颜色
+int g_ball_color = BLUE;
 
 //切割图像参数
 int roi_region_x1 = 320;
@@ -92,7 +94,8 @@ int main()
     //循环中的变量
     Mat segcolor_pic;
     Mat result;
-    int ball_color;
+    
+    //彩色圖像的中間變量
     Mat mid_color_image;
 
     //创建数据管道
@@ -150,8 +153,8 @@ int main()
 
         //多个颜色切换检测
 
-        ball_color = BLACK;
-        switch (ball_color){
+        g_ball_color = BLACK;
+        switch (g_ball_color){
             case PINK :
                 //HSV滤色的参数设定
                 hmin_Max = 261;  
@@ -245,7 +248,7 @@ int main()
         roi_region_x  = color_image.rows*3/4-50;
         roi_region_y1 = color_image.cols;
         roi_region_y  = color_image.cols/2;
-        //!这里要改roi，变成全局统一的位置
+        //这里要改roi，变成全局统一的位置
         //mid_color_image = mid_color_image(Range(color_image.rows*3/4-50,color_image.rows),Range(color_image.cols/2,color_image.cols)).clone(); 
         //输出画面参数
         cout << "color_image.rows=" << color_image.rows << "\t" << color_image.cols << endl;
@@ -280,11 +283,11 @@ int main()
             << cvRound(circles[0][1]) << "\t=   centerLocation_    " << centerLocation_x << "\t" << centerLocation_y << endl;
             //测量距离
             measure_distance(color_image , result , cv::Size(20,20) , profile , centerLocation_x , centerLocation_y);
-            
+
             //测量角度
             cout << "\nangle X = " << deviation_angle_x( centerLocation_x , centerLocation_y ) << "\tangle Y = " <<
             deviation_angle_y( centerLocation_x , centerLocation_y ) << endl;
-
+/* 
             centerLocation_x = 0;
             centerLocation_y = 0;
             //测量距离
@@ -355,7 +358,7 @@ int main()
             measure_distance(color_image , result , cv::Size(20,20) , profile , centerLocation_x , centerLocation_y);
             //测量角度
             cout << "\t 640 477angle X = " << deviation_angle_x( centerLocation_x , centerLocation_y ) << "\tangle Y = " <<
-            deviation_angle_y( centerLocation_x , centerLocation_y ) << endl;
+            deviation_angle_y( centerLocation_x , centerLocation_y ) << endl; */
 
         }
         else

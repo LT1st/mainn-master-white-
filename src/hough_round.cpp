@@ -5,6 +5,7 @@
 */
 
 int lostCnt;
+
 vector<Vec3f> houghRound_circles(
             Mat dst_s,
             int hough_minDist ,          //圆心之间的最小距离= 70
@@ -48,8 +49,8 @@ vector<Vec3f> houghRound_circles(
 
     //Canny(dst_s,dst_s,10,250,5);
     
-    cvtColor(dst_s,dst_s,COLOR_BGR2GRAY);
-    normalize(dst_s,dst_s,1.0,0.0,NORM_MINMAX);//归一到0~1之间 
+    cvtColor(dst_s , dst_s , COLOR_BGR2GRAY);
+    normalize(dst_s , dst_s , 1.0 , 0.0 , NORM_MINMAX);//归一到0~1之间 
     dst_s.convertTo(dst_s, CV_8UC1, 255, 0); //转换为0~255之间的整数 
     /*
     第一个参数，InputArray类型的image，输入图像，即源图像，需为8位的灰度单通道图像。
@@ -72,11 +73,12 @@ vector<Vec3f> houghRound_circles(
     HoughCircles(dst_s, circles, HOUGH_GRADIENT, 2, hough_minDist, hough_canny, 
                 hough_addthersold, hough_minRadius, hough_maxRadius);
     //在图中绘制出圆
-    if(circles.size() == 0 )
+    if(circles.size() == 0 )   
     {
         lostCnt++;
         cout << "lostCnt = " << lostCnt << endl;
     }
+
     for (size_t i = 0; i < circles.size(); i++)
     {
         //参数定义
@@ -89,6 +91,7 @@ vector<Vec3f> houghRound_circles(
         //绘制圆心
         circle(dst_s, center, 3, Scalar(0, 255, 0), -1, 8, 0);
     }
+     
     //输出图像
     imshow("hough_ground_结果", dst_s);
     return circles;

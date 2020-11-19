@@ -25,11 +25,16 @@ Mat align_Depth2Color(Mat depth,Mat color,rs2::pipeline_profile profile){
     //获取内参
     const auto intrinDepth = depth_stream.get_intrinsics();
     const auto intrinColor = color_stream.get_intrinsics();
-           g_dpth_ppx = intrinDepth.ppx;
-           g_dpth_fx  = intrinDepth.fx;
-           g_dpth_ppy = intrinDepth.ppy;
-           g_dpth_fy  = intrinDepth.fy;
 
+    g_dpth_ppx = intrinDepth.ppx;
+    g_dpth_fx  = intrinDepth.fx;
+    g_dpth_ppy = intrinDepth.ppy;
+    g_dpth_fy  = intrinDepth.fy;
+
+    g_color_ppx = intrinColor.ppx;
+    g_color_ppy = intrinColor.ppy;
+    g_color_fy = intrinDepth.fy;
+    g_color_fx = intrinDepth.fx;
 /*     cout << "\t深度相机内参：" << g_dpth_ppx << "\t" << g_dpth_ppy << "\t" << g_dpth_fx
          << "\t" << g_dpth_fy << "\t"
          << "\t彩色相机参数：" << intrinColor.ppx << "\t" << intrinColor.ppy << "\t" << endl;
@@ -98,18 +103,65 @@ void measure_distance(Mat &color,Mat depth,cv::Size range,rs2::pipeline_profile 
     cv::Point center(x, y);
     //定义计算距离的范围
     cv::Rect RectRange(center.x-range.width/2,center.y-range.height/2,range.width,range.height);
+    
+    float max1=0,max2=0,max3=0,max4=0;
     //遍历该范围
-    float distance_sum=0;
-    int effective_pixel=0;
+    float distance_sum = 0,distanceNow = 0;
+    int effective_pixel = 0;
     for(int y=RectRange.y;y<RectRange.y+RectRange.height;y++){
         for(int x=RectRange.x;x<RectRange.x+RectRange.width;x++){
             //如果深度图下该点像素不为0，表示有距离信息
             if(depth.at<uint16_t>(y,x)){
-                distance_sum+=depth_scale*depth.at<uint16_t>(y,x);
-                effective_pixel++;
+                distanceNow = depth_scale*depth.at<uint16_t>(y,x);
+                if(distanceNow >= max1)
+                {
+                    //頂朱子模型
+                    max4 = max3;
+                    max3 = max2;
+                    max2 = max1;
+                    max1 = distanceNow;
+                }
+/*                 else if(distanceNow >= max2)
+                {
+                    //頂朱子模型
+                    max4 = max3;
+                    max3 = max2;
+                    max2 = distanceNow;
+                }
+                else if(distanceNow >= max3)
+                {
+                    //頂朱子模型
+                    max4 = max3;
+                    max3 = distanceNow;
+                }
+                else if(distanceNow >= max4)
+                {
+                    max4 = distanceNow;
+                } */
+
+
+                //max4 = max4 >= distanceNow ? max4 : distanceNow;
+
+                distance_sum += distanceNow;
+                effective_pixel ++;
             }
         }
     }
+    cout << "四個排序" << max1 << "\t" << max2 << "\t" <<  max3 << "\t" 
+         << max4  << endl;
+    if(max4!=0)
+    {
+        cout <<  "四個\t" << 0.25*(max1 + max2 + max3 + max4) << endl;
+    }
+    else if(max3!=0)
+    {   
+        cout << "三個\t" << 0.33*(max1 + max2 + max3) << endl;
+    }
+    else if(0 != max2)
+    {
+        cout << "兩個\t" << 0.5*(max1 + max2 ) << endl;
+    }
+    
     cout<<"遍历完成，有效像素点:"<<effective_pixel<<endl;
     float effective_distance=distance_sum/effective_pixel;
     cout<<"目标距离："<<effective_distance<<" m"<<endl;
