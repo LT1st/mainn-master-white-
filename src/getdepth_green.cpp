@@ -30,10 +30,10 @@ Mat align_Depth2Color(Mat depth,Mat color,rs2::pipeline_profile profile){
            g_dpth_ppy = intrinDepth.ppy;
            g_dpth_fy  = intrinDepth.fy;
 
-    cout << "\t深度相机内参：" << g_dpth_ppx << "\t" << g_dpth_ppy << "\t" << g_dpth_fx
+/*     cout << "\t深度相机内参：" << g_dpth_ppx << "\t" << g_dpth_ppy << "\t" << g_dpth_fx
          << "\t" << g_dpth_fy << "\t"
          << "\t彩色相机参数：" << intrinColor.ppx << "\t" << intrinColor.ppy << "\t" << endl;
-
+ */
     //直接获取从深度摄像头坐标系到彩色摄像头坐标系的欧式变换矩阵
     //auto  extrinDepth2Color=depth_stream.get_extrinsics_to(color_stream);
     rs2_extrinsics  extrinDepth2Color;

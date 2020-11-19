@@ -93,6 +93,7 @@ int main()
     Mat segcolor_pic;
     Mat result;
     int ball_color;
+    Mat mid_color_image;
 
     //创建数据管道
     rs2::pipeline pipe;
@@ -237,15 +238,21 @@ int main()
 
                 break;
         }
-        Mat mid_color_image = color_image.clone();
+        mid_color_image = color_image.clone();
         //mid_color_image = mid_color_image(Rect(color_image.cols/2,color_image.rows*3/4,color_image.rows/4,color_image.cols/2)).clone(); 
         
+        roi_region_x1 = color_image.rows;
+        roi_region_x  = color_image.rows*3/4-50;
+        roi_region_y1 = color_image.cols;
+        roi_region_y  = color_image.cols/2;
         //!这里要改roi，变成全局统一的位置
-        mid_color_image = mid_color_image(Range(color_image.rows*3/4-50,color_image.rows),Range(color_image.cols/2,color_image.cols)).clone(); 
-       
-        //mid_color_image = mid_color_image(Range(roi_region_x,roi_region_x1),Range(roi_region_y,roi_region_y1)).clone(); 
+        //mid_color_image = mid_color_image(Range(color_image.rows*3/4-50,color_image.rows),Range(color_image.cols/2,color_image.cols)).clone(); 
+        //输出画面参数
+        cout << "color_image.rows=" << color_image.rows << "\t" << color_image.cols << endl;
+        mid_color_image = mid_color_image(Range(roi_region_x,roi_region_x1),Range(roi_region_y,roi_region_y1)).clone(); 
+        
         namedWindow("tst");
-        imshow("tst",mid_color_image);         
+        imshow("tst",mid_color_image);
 
         //用测好的参数来HSV分割， trickbar参数测量在 hsv分割地面（保留）
         segcolor_pic = segmentation_HSV(hmin_Max , hmax_Max, 
@@ -267,13 +274,89 @@ int main()
         {
             centerLocation_x = cvRound(circles[0][0]) + roi_region_x;
             centerLocation_y = cvRound(circles[0][1]) + roi_region_y;
-
+            
+            //输出当前roi
+            cout << roi_region_x << "\troi_region_   " << roi_region_y << "\t+  cvRound   " <<  cvRound(circles[0][0]) << "\t"
+            << cvRound(circles[0][1]) << "\t=   centerLocation_    " << centerLocation_x << "\t" << centerLocation_y << endl;
             //测量距离
-            measure_distance(color_image,result,cv::Size(20,20),profile,centerLocation_x,centerLocation_y);
+            measure_distance(color_image , result , cv::Size(20,20) , profile , centerLocation_x , centerLocation_y);
             
             //测量角度
-            cout << deviation_angle_x( centerLocation_x , centerLocation_y ) << "\t" <<
+            cout << "\nangle X = " << deviation_angle_x( centerLocation_x , centerLocation_y ) << "\tangle Y = " <<
             deviation_angle_y( centerLocation_x , centerLocation_y ) << endl;
+
+            centerLocation_x = 0;
+            centerLocation_y = 0;
+            //测量距离
+            measure_distance(color_image , result , cv::Size(20,20) , profile , centerLocation_x , centerLocation_y);
+            //测量角度
+            cout << "\tangle X = " << deviation_angle_x( centerLocation_x , centerLocation_y ) << "\tangle Y = " <<
+            deviation_angle_y( centerLocation_x , centerLocation_y ) << endl;
+
+            centerLocation_x = 0;
+            centerLocation_y = 240;
+            //测量距离
+            measure_distance(color_image , result , cv::Size(20,20) , profile , centerLocation_x , centerLocation_y);
+            //测量角度
+            cout << "\t 0 240 angle X = " << deviation_angle_x( centerLocation_x , centerLocation_y ) << "\tangle Y = " <<
+            deviation_angle_y( centerLocation_x , centerLocation_y ) << endl;
+
+            centerLocation_x = 0;
+            centerLocation_y = 477;
+            //测量距离
+            measure_distance(color_image , result , cv::Size(20,20) , profile , centerLocation_x , centerLocation_y);
+            //测量角度
+            cout << "\t 0 477angle X = " << deviation_angle_x( centerLocation_x , centerLocation_y ) << "\tangle Y = " <<
+            deviation_angle_y( centerLocation_x , centerLocation_y ) << endl;
+            
+            centerLocation_x = 320;
+            centerLocation_y = 0;
+            //测量距离
+            measure_distance(color_image , result , cv::Size(20,20) , profile , centerLocation_x , centerLocation_y);
+            //测量角度
+            cout << "\t 320 0 angle X = " << deviation_angle_x( centerLocation_x , centerLocation_y ) << "\tangle Y = " <<
+            deviation_angle_y( centerLocation_x , centerLocation_y ) << endl;
+
+            centerLocation_x = 320;
+            centerLocation_y = 240;
+            //测量距离
+            measure_distance(color_image , result , cv::Size(20,20) , profile , centerLocation_x , centerLocation_y);
+            //测量角度
+            cout << "\t 320 240 angle X = " << deviation_angle_x( centerLocation_x , centerLocation_y ) << "\tangle Y = " <<
+            deviation_angle_y( centerLocation_x , centerLocation_y ) << endl;
+
+            centerLocation_x = 320;
+            centerLocation_y = 477;
+            //测量距离
+            measure_distance(color_image , result , cv::Size(20,20) , profile , centerLocation_x , centerLocation_y);
+            //测量角度
+            cout << "\t 320 477 angle X = " << deviation_angle_x( centerLocation_x , centerLocation_y ) << "\tangle Y = " <<
+            deviation_angle_y( centerLocation_x , centerLocation_y ) << endl;
+
+            centerLocation_x = 640;
+            centerLocation_y = 0;
+            //测量距离
+            measure_distance(color_image , result , cv::Size(20,20) , profile , centerLocation_x , centerLocation_y);
+            //测量角度
+            cout << "\t 640 0 angle X = " << deviation_angle_x( centerLocation_x , centerLocation_y ) << "\tangle Y = " <<
+            deviation_angle_y( centerLocation_x , centerLocation_y ) << endl;
+
+            centerLocation_x = 640;
+            centerLocation_y = 240;
+            //测量距离
+            measure_distance(color_image , result , cv::Size(20,20) , profile , centerLocation_x , centerLocation_y);
+            //测量角度
+            cout << "\t 640 240 angle X = " << deviation_angle_x( centerLocation_x , centerLocation_y ) << "\tangle Y = " <<
+            deviation_angle_y( centerLocation_x , centerLocation_y ) << endl;
+
+            centerLocation_x = 640;
+            centerLocation_y = 477;
+            //测量距离
+            measure_distance(color_image , result , cv::Size(20,20) , profile , centerLocation_x , centerLocation_y);
+            //测量角度
+            cout << "\t 640 477angle X = " << deviation_angle_x( centerLocation_x , centerLocation_y ) << "\tangle Y = " <<
+            deviation_angle_y( centerLocation_x , centerLocation_y ) << endl;
+
         }
         else
         {
