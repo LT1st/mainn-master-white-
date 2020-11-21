@@ -74,6 +74,10 @@ float g_color_fy  = 300;
 
 int main()
 {
+    //tst
+    //rs2_set_option(const rs2_sensor* sensor, rs2_option option, float value, rs2_error** error);
+
+
     //初始化启动时间
     time_main = static_cast<double>(getTickCount());
 
@@ -111,12 +115,12 @@ int main()
     float depth_clipping_distance = 1.f;
  
     //声明数据流
-    auto depth_stream=profile.get_stream(RS2_STREAM_DEPTH).as<rs2::video_stream_profile>();
-    auto color_stream=profile.get_stream(RS2_STREAM_COLOR).as<rs2::video_stream_profile>();
+    auto depth_stream = profile.get_stream(RS2_STREAM_DEPTH).as<rs2::video_stream_profile>();
+    auto color_stream = profile.get_stream(RS2_STREAM_COLOR).as<rs2::video_stream_profile>();
  
     //获取内参
-    auto intrinDepth=depth_stream.get_intrinsics();
-    auto intrinColor=color_stream.get_intrinsics();
+    auto intrinDepth = depth_stream.get_intrinsics();
+    auto intrinColor = color_stream.get_intrinsics();
  
     //直接获取从深度摄像头坐标系到彩色摄像头坐标系的欧式变换矩阵
     auto  extrinDepth2Color=depth_stream.get_extrinsics_to(color_stream);
@@ -257,7 +261,7 @@ int main()
         namedWindow("tst");
         imshow("tst",mid_color_image);
 
-        //用测好的参数来HSV分割， trickbar参数测量在 hsv分割地面（保留）
+        //用测好的参数来HSV分割，trickbar参数测量在 hsv分割地面（保留）
         segcolor_pic = segmentation_HSV(hmin_Max , hmax_Max, 
             smin_Max, smax_Max, vmin_Max, vmax_Max, mid_color_image, seg_bkg);
         namedWindow("segcolor");imshow("segcolor", segcolor_pic);

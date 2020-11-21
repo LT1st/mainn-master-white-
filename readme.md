@@ -13,3 +13,7 @@ terminate called after throwing an instance of 'cv::Exception'
 
 程序修改在这儿
 
+rs_option 中有调整realsense参数的方法   
+'''cpp
+rs2_set_option(const rs2_sensor* sensor, rs2_option option, float value, rs2_error** error);
+'''
